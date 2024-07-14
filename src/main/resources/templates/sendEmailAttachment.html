@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Send Email with Attachment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Send Email with Attachment</h2>
+        <form th:action="@{/sendMailWithAttachment}" th:object="${emailDetails}" method="post" enctype="multipart/form-data" class="form-group">
+            <div class="form-group">
+                <label for="recipient">Recipient</label>
+                <input type="email" id="recipient" th:field="*{recipient}" class="form-control" placeholder="Enter recipient's email" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" th:field="*{subject}" class="form-control" placeholder="Enter subject" required>
+            </div>
+            <div class="form-group">
+                <label for="msgBody">Message</label>
+                <textarea id="msgBody" th:field="*{msgBody}" class="form-control" placeholder="Enter message" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="attachment">Attachment</label>
+                <input type="file" id="attachment" name="file" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+        </form>
+        
+        <!-- Optional: Display status message -->
+        <div th:if="${status}">
+            <p th:text="${status}" class="alert alert-info"></p>
+        </div>
+        
+        <br>
+        <a th:href="@{/}">Back to Home</a>
+    </div>
+</body>
+</html>

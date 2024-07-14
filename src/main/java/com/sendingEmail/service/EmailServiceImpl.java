@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sendingEmail.model.EmailDetails;
 
@@ -51,15 +52,17 @@ public class EmailServiceImpl implements EmailService {
             }
 
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
             mimeMessageHelper.setText(details.getMsgBody());
             mimeMessageHelper.setSubject(details.getSubject());
+            
 
-            if (details.getAttachment() != null && !details.getAttachment().isEmpty()) {
-                FileSystemResource file = new FileSystemResource(new File(details.getAttachment()));
-                mimeMessageHelper.addAttachment(file.getFilename(), file);
+            MultipartFile file = details.getAttachment();
+            if (file != null && !file.isEmpty()) {
+                mimeMessageHelper.addAttachment(file.getOriginalFilename(), file);
             }
 
             javaMailSender.send(mimeMessage);
